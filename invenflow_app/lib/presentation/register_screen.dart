@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invenflow_app/presentation/widgets/error_message.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
@@ -68,8 +69,18 @@ class RegisterScreen extends StatelessWidget {
               const SizedBox(height: 24.0),
               ElevatedButton(
                 onPressed: () {
-                  // Handle registration button click
-                  // You can access the entered values using the text controllers
+                  // Verify that the text fields are completed.
+                  if (emailController.text.isEmpty ||
+                      nameController.text.isEmpty ||
+                      surnameController.text.isEmpty ||
+                      companyNameController.text.isEmpty ||
+                      passwordController.text.isEmpty ||
+                      confirmPasswordController.text.isEmpty) {
+                    showErrorDialog(
+                        context, 'Por favor ingresar todos los datos.');
+                  } else {
+                    //
+                  }
                 },
                 child: const Text('+ Registrarme'),
               ),
