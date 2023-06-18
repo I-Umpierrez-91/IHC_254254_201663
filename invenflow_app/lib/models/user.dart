@@ -1,14 +1,25 @@
 class User {
-  final String email;
-  final String name;
-  final String surname;
-  final String password;
-  final String companyName;
+  String firstName;
+  String lastName;
+  String email;
+  String password;
+  String companyName;
 
-  User(
-      {required this.email,
-      required this.name,
-      required this.surname,
-      required this.password,
-      required this.companyName});
+  User({
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.password,
+    required this.companyName,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'password': password,
+      'companyName': companyName,
+    };
+  }
 }

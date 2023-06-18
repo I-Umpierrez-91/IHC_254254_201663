@@ -1,11 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:invenflow_app/factory_service.dart';
+import 'package:invenflow_app/models/user.dart';
 import 'package:invenflow_app/presentation/widgets/error_message.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController surnameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   final TextEditingController companyNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
@@ -31,14 +34,14 @@ class RegisterScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               TextField(
-                controller: nameController,
+                controller: firstNameController,
                 decoration: const InputDecoration(
                   labelText: 'Nombre',
                 ),
               ),
               const SizedBox(height: 16.0),
               TextField(
-                controller: surnameController,
+                controller: lastNameController,
                 decoration: const InputDecoration(
                   labelText: 'Apellido',
                 ),
@@ -71,15 +74,23 @@ class RegisterScreen extends StatelessWidget {
                 onPressed: () {
                   // Verify that the text fields are completed.
                   if (emailController.text.isEmpty ||
-                      nameController.text.isEmpty ||
-                      surnameController.text.isEmpty ||
+                      firstNameController.text.isEmpty ||
+                      lastNameController.text.isEmpty ||
                       companyNameController.text.isEmpty ||
                       passwordController.text.isEmpty ||
                       confirmPasswordController.text.isEmpty) {
                     showErrorDialog(
                         context, 'Por favor ingresar todos los datos.');
                   } else {
-                    //
+                    final factory = FactoryServices().getAuthService();
+                    User newUser = User(
+                        email: emailController.text,
+                        firstName: firstNameController.text,
+                        lastName: lastNameController.text,
+                        companyName: companyNameController.text,
+                        password: passwordController.text);
+                    print(newUser);
+                    factory.insertUser(newUser);
                   }
                 },
                 child: const Text('+ Registrarme'),

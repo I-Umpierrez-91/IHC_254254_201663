@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:invenflow_app/presentation/login_screen.dart';
 
-void main() => runApp(LoginApp());
+void main() {
+  runApp(LoginApp());
+}
 
 class LoginApp extends StatelessWidget {
   const LoginApp({super.key});
