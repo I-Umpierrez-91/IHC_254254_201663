@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:invenflow_app/presentation/register_screen.dart';
+import 'package:invenflow_app/presentation/widgets/error_message.dart';
+
+import '../factory_service.dart';
+import '../models/session.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +25,14 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             TextFormField(
+              controller: emailController,
               decoration: const InputDecoration(
                 labelText: 'Correo electrónico',
               ),
             ),
             const SizedBox(height: 16.0),
             TextFormField(
+              controller: passwordController,
               obscureText: true,
               decoration: const InputDecoration(
                 labelText: 'Contraseña',
@@ -33,7 +41,18 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 32.0),
             ElevatedButton(
               onPressed: () {
-                // Acción al presionar el botón de inicio de sesión
+                // Verify that the text fields are completed.
+                if (emailController.text.isEmpty ||
+                    passwordController.text.isEmpty) {
+                  showErrorDialog(
+                      context, 'Por favor ingresar todos los datos.');
+                } else {
+                  final factory = FactoryServices().getAuthService();
+                  Session session = Session(
+                      email: emailController.text,
+                      password: passwordController.text);
+                  factory.logIn(session);
+                }
               },
               child: const Text('Iniciar sesión'),
             ),

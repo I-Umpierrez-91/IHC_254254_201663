@@ -1,6 +1,8 @@
 import 'package:invenflow_app/models/user.dart';
 import 'package:invenflow_app/repositories/auth/auth_dataprovider.dart';
 
+import '../../models/session.dart';
+
 class AuthRepository {
   final AuthDataProvider _authDataProvider;
 
@@ -9,5 +11,9 @@ class AuthRepository {
 
   Future insertUser(User? user) async {
     return await _authDataProvider.insertUser(user);
+  }
+
+  Future logIn(Session? session) async {
+    return await _authDataProvider.logIn(session);
   }
 }
