@@ -1,0 +1,801 @@
+{
+	"info": {
+		"_postman_id": "27b720ca-e735-4986-8551-51c7fc282fb0",
+		"name": "Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7900659",
+		"_collection_link": "https://lively-shadow-447895.postman.co/workspace/ASP~d6aae7f1-97b4-47e5-a3dd-cd30af5692f9/collection/7900659-27b720ca-e735-4986-8551-51c7fc282fb0?action=share&creator=7900659&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"hola@hola.com\",\r\n    \"password\" : \"Password1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}auth/login",
+							"host": [
+								"{{backend url base}}auth"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alta usuario invitacion",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\" : \"Nombre\",\r\n    \"lastName\" : \"Apellido\",\r\n    \"password\" : \"Password1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}auth/signup/{{invite token}}",
+							"host": [
+								"{{backend url base}}auth"
+							],
+							"path": [
+								"signup",
+								"{{invite token}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alta admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"adminData\": {\r\n    \"firstName\" : \"Nombre\",\r\n    \"lastName\" : \"Apellido\",\r\n    \"email\" : \"hola@hola.com\",\r\n    \"password\" : \"Password1\",\r\n    \"companyName\" : \"Comnpany 1\"\r\n}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}auth/company-signup",
+							"host": [
+								"{{backend url base}}auth"
+							],
+							"path": [
+								"company-signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener campos formulario invitacion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backend url base}}auth/signup/{{invite token}}",
+							"host": [
+								"{{backend url base}}auth"
+							],
+							"path": [
+								"signup",
+								"{{invite token}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Provider",
+			"item": [
+				{
+					"name": "Crear provider",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Provider\",\r\n    \"email\" : \"Provider1@vaca7.com\",\r\n    \"address\" : \"san jose de las peras\",\r\n    \"phone\" : \"0991711\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}providers",
+							"host": [
+								"{{backend url base}}providers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch provider",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Provider2\",\r\n    \"email\" : \"Provider1@vaca7.com\",\r\n    \"address\" : \"san jose de las peras\",\r\n    \"phone\" : \"0991711\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}providers/10",
+							"host": [
+								"{{backend url base}}providers"
+							],
+							"path": [
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get provider by Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}providers/10",
+							"host": [
+								"{{backend url base}}providers"
+							],
+							"path": [
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete provider by Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}providers/10",
+							"host": [
+								"{{backend url base}}providers"
+							],
+							"path": [
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all providers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}providers",
+							"host": [
+								"{{backend url base}}providers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "addTokenTo",
+						"value": "header",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "Invite User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"ismael.umpierrez@gmail.com\",\r\n    \"role\" : \"user\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}admin/invite",
+							"host": [
+								"{{backend url base}}admin"
+							],
+							"path": [
+								"invite"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "addTokenTo",
+						"value": "header",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "GetPurchasesByProvider",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backend url base}}reports/purchasesByProvider?provider_id=1&start_date=2023-04-01&end_date=2023-04-18",
+							"host": [
+								"{{backend url base}}reports"
+							],
+							"path": [
+								"purchasesByProvider"
+							],
+							"query": [
+								{
+									"key": "provider_id",
+									"value": "1"
+								},
+								{
+									"key": "company_id",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "start_date",
+									"value": "2023-04-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2023-04-18"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTopSellingProducts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backend url base}}/reports/topSellingProducts",
+							"host": [
+								"{{backend url base}}"
+							],
+							"path": [
+								"reports",
+								"topSellingProducts"
+							],
+							"query": [
+								{
+									"key": "company_id",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSalesByDate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backend url base}}reports/salesByDate?start_date=2023-04-01&end_date=2023-04-18",
+							"host": [
+								"{{backend url base}}reports"
+							],
+							"path": [
+								"salesByDate"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2023-04-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2023-04-18"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSalesByDateByProduct",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backend url base}}reports/salesByDateByProduct?start_date=2023-04-01&end_date=2023-04-18",
+							"host": [
+								"{{backend url base}}reports"
+							],
+							"path": [
+								"salesByDateByProduct"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2023-04-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2023-04-18"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "addTokenTo",
+						"value": "header",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "List Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backend url base}}products",
+							"host": [
+								"{{backend url base}}products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backend url base}}products/9",
+							"host": [
+								"{{backend url base}}products"
+							],
+							"path": [
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product image url",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backend url base}}products/9/upload-url",
+							"host": [
+								"{{backend url base}}products"
+							],
+							"path": [
+								"9",
+								"upload-url"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{backend url base}}products/8",
+							"host": [
+								"{{backend url base}}products"
+							],
+							"path": [
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Producto 1\",\r\n    \"description\" : \"Gran Producto\",\r\n    \"price\" : 52,\r\n    \"stock\" : 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}products",
+							"host": [
+								"{{backend url base}}products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Producto 1\",\r\n    \"description\" : \"Gran Producto\",\r\n    \"price\" : 53,\r\n    \"stock\" : 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}products/8",
+							"host": [
+								"{{backend url base}}products"
+							],
+							"path": [
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "addTokenTo",
+						"value": "header",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Purchases",
+			"item": [
+				{
+					"name": "Crear purchase",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"provider\" : 11,\r\n    \"purchaseDetails\": [\r\n        {\r\n            \"productId\": 1,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"productId\": 4,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"productId\": 2,\r\n            \"quantity\": 5\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}purchases",
+							"host": [
+								"{{backend url base}}purchases"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "addTokenTo",
+						"value": "header",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Sales",
+			"item": [
+				{
+					"name": "Crear sale",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client\": 1,\r\n    \"saleDate\": \"2023-02-23\",\r\n    \"saleDetails\": [\r\n        {\r\n            \"productId\": 1,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"productId\": 4,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"productId\": 2,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"productId\": 3,\r\n            \"quantity\": 20\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backend url base}}sales",
+							"host": [
+								"{{backend url base}}sales"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "addTokenTo",
+						"value": "header",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "backend url base",
+			"value": "http://localhost:8000/api/v1/"
+		},
+		{
+			"key": "userToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "adminToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJqc29zZUBzYWRhcy5jb20iLCJjb21wYW55SWQiOjE0LCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2ODMyMzgyMjMsImV4cCI6MTY4MzI4MTQyM30.kKHmNO3BgoNARDPoQxcGHxu1i2afjrw4YSfb9VkplBg",
+			"type": "string"
+		},
+		{
+			"key": "invite token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55SWQiOjE0LCJlbWFpbCI6ImlzbWFlbC51bXBpZXJyZXpAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE2ODMwNTkxMzEsImV4cCI6MTY4MzE0NTUzMX0.6CmP8D8nwz3KmhBV5gy5aEdFBjej-qr12q16C9yzPRk"
+		}
+	]
+}
