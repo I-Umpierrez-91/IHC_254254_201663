@@ -39,4 +39,34 @@ class ProductDataProvider {
       throw Exception('Failed to get products');
     }
   }
+
+  Future<Product> createProduct(Product? product) async {
+    final url = Uri.parse('${URL}/products');
+    final body = jsonEncode(product?.toJson());
+    final currentToken = await TokenManager.getToken();
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${currentToken}'
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 201) {
+      final jsonResponse = jsonDecode(response.body);
+      final product = Product(
+        name: jsonResponse['name'],
+        description: jsonResponse['description'],
+        image: jsonResponse['image'],
+        price: jsonResponse['price'],
+        stock: jsonResponse['stock'],
+      );
+      return product;
+    } else {
+      print('Request failed with status code: ${response.statusCode}');
+      throw Exception('Failed to create product');
+    }
+  }
 }

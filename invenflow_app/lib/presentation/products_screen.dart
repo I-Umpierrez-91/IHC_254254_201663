@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:invenflow_app/presentation/widgets/error_message.dart';
+import 'package:invenflow_app/presentation/widgets/success_message.dart';
 
 import '../factory_service.dart';
 import '../models/product.dart';
@@ -13,14 +15,13 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen> {
   late List<Product> products = [];
-  final _formKey = GlobalKey<FormState>();
-  late String _name;
-  late String _description;
-  late String _image;
-  late double _price;
-  late int _stock;
   final ImagePicker _picker = ImagePicker();
   XFile? _imageFile;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController imageController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController stockController = TextEditingController();
 
   @override
   void initState() {
@@ -116,120 +117,122 @@ class _ProductsScreenState extends State<ProductsScreen> {
             builder: (context) {
               return Container(
                 padding: EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Add Product',
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Add Product',
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
                           ),
-                          IconButton(
-                            onPressed: _openCamera,
-                            icon: Icon(Icons.camera_alt),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 16.0),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Name',
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a name';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _name = value!;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Description',
+                        IconButton(
+                          onPressed: _openCamera,
+                          icon: Icon(Icons.camera_alt),
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a description';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _description = value!;
-                        },
+                      ],
+                    ),
+                    SizedBox(height: 16.0),
+                    TextFormField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        labelText: 'Name',
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Image',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter an image URL';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _image = value!;
-                        },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a name';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: descriptionController,
+                      decoration: InputDecoration(
+                        labelText: 'Description',
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Price',
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a price';
-                          }
-                          if (double.tryParse(value) == null) {
-                            return 'Please enter a valid price';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _price = double.parse(value!);
-                        },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a description';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: imageController,
+                      decoration: InputDecoration(
+                        labelText: 'Image',
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Stock',
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a stock quantity';
-                          }
-                          if (int.tryParse(value) == null) {
-                            return 'Please enter a valid stock quantity';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _stock = int.parse(value!);
-                        },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter an image URL';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: priceController,
+                      decoration: InputDecoration(
+                        labelText: 'Price',
                       ),
-                      SizedBox(height: 16.0),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            // Add your logic to save the product
-                            // using the entered values (_name, _description, _image, _price, _stock)
-                            Navigator.pop(context);
-                          }
-                        },
-                        child: Text('Add'),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a price';
+                        }
+                        if (double.tryParse(value) == null) {
+                          return 'Please enter a valid price';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: stockController,
+                      decoration: InputDecoration(
+                        labelText: 'Stock',
                       ),
-                    ],
-                  ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a stock quantity';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'Please enter a valid stock quantity';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Verify that the text fields are completed.
+                        if (nameController.text.isEmpty ||
+                            descriptionController.text.isEmpty ||
+                            priceController.text.isEmpty ||
+                            stockController.text.isEmpty) {
+                          showErrorDialog(
+                              context, 'Por favor ingresar todos los datos.');
+                        } else {
+                          final factory = FactoryServices().getProductService();
+                          Product newProduct = Product(
+                              name: nameController.text,
+                              description: descriptionController.text,
+                              image: imageController.text,
+                              price: int.parse(priceController.text),
+                              stock: int.parse(stockController.text));
+                          factory.createProduct(newProduct);
+                          showSuccessDialog(
+                              context,
+                              'Producto creado de exitosamente.',
+                              "toProductScreen");
+                        }
+                      },
+                      child: Text('Add'),
+                    ),
+                  ],
                 ),
               );
             },
