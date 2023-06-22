@@ -1,8 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:invenflow_app/presentation/register_screen.dart';
+import 'package:invenflow_app/factory_service.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
+
+  void _login() async {
+  final email = emailController.text;
+  final password = passwordController.text;
+  try {
+    final token = await dataProvider.loginUser(email, password);
+    // Inicio de sesión exitoso, redirigir a otra pantalla
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(token: token),
+      ),
+    );
+  } catch (e) {
+    // Error en el inicio de sesión, mostrar mensaje de error
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: ${e.toString()}')),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
