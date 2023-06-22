@@ -4,8 +4,10 @@ import 'package:invenflow_app/models/user.dart';
 
 class AuthDataProvider {
   static const URL =
-      "http://api-gateway-prod-alb-2091094697.us-east-1.elb.amazonaws.com/api/v1";
-
+  // android emulator usar 10.0.2.2
+  // dispositivo real usar IP
+      "http://192.168.68.106:8000/api/v1";
+      
   Future<int> insertUser(User? user) async {
     final url = Uri.parse('${URL}/auth/company-signup');
     final body = jsonEncode({"adminData": user?.toJson()});
@@ -18,7 +20,7 @@ class AuthDataProvider {
 
     if (response.statusCode == 201) {
       final jsonResponse = jsonDecode(response.body);
-      final userId = jsonResponse["user"] as int;
+      final userId = jsonResponse["userId"] as int;
       print('User created sucessfully. This is the userId created: ${userId}');
       return userId;
     } else {
