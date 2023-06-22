@@ -10,6 +10,7 @@ class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  String welcomeMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 32.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // Verify that the text fields are completed.
                 if (emailController.text.isEmpty ||
                     passwordController.text.isEmpty) {
@@ -52,9 +53,17 @@ class LoginPage extends StatelessWidget {
                   Session session = Session(
                       email: emailController.text,
                       password: passwordController.text);
-                  factory.logIn(session);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                  var loginToken = await factory.logIn(session);
+                  print(loginToken);
+                  if (loginToken != 'false') {
+                    print("1");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                  } else {
+                    print("2");
+                    showErrorDialog(
+                        context, 'Usuario o contraseña incorrecta.');
+                  }
                 }
               },
               child: const Text('Iniciar sesión'),

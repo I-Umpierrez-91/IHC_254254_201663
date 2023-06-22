@@ -4,6 +4,8 @@ import 'package:invenflow_app/presentation/purchases_screen.dart';
 import 'package:invenflow_app/presentation/sales_screen.dart';
 import 'package:invenflow_app/presentation/stock_screen.dart';
 
+import '../common/tockenManager.dart';
+
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
@@ -12,6 +14,15 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await TokenManager.deleteToken();
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -24,9 +35,10 @@ class HomeScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SalesScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SalesScreen()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.transparent,
@@ -42,9 +54,10 @@ class HomeScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PurchasesScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PurchasesScreen()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.transparent,
@@ -66,9 +79,10 @@ class HomeScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => StockScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => StockScreen()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.transparent,
@@ -84,9 +98,10 @@ class HomeScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProductsScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductsScreen()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.transparent,
