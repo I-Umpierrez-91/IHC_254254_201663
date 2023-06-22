@@ -6,8 +6,11 @@ import 'package:invenflow_app/models/session.dart';
 import '../../common/tockenManager.dart';
 
 class AuthDataProvider {
-  static const URL = "http://192.168.1.50:8000/api/v1";
-
+  static const URL =
+  // android emulator usar 10.0.2.2
+  // dispositivo real usar IP
+      "http://192.168.1.50:800api/v1";
+      
   Future<int> insertUser(User? user) async {
     final url = Uri.parse('${URL}/auth/company-signup');
     final body = jsonEncode({"adminData": user?.toJson()});
@@ -20,7 +23,7 @@ class AuthDataProvider {
 
     if (response.statusCode == 201) {
       final jsonResponse = jsonDecode(response.body);
-      final userId = jsonResponse["user"] as int;
+      final userId = jsonResponse["userId"] as int;
       print('User created sucessfully. This is the userId created: ${userId}');
       return userId;
     } else {
