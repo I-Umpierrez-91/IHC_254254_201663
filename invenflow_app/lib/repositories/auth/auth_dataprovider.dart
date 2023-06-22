@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:invenflow_app/models/user.dart';
@@ -6,10 +7,7 @@ import 'package:invenflow_app/models/session.dart';
 import '../../common/tockenManager.dart';
 
 class AuthDataProvider {
-  static const URL =
-      // android emulator usar 10.0.2.2
-      // dispositivo real usar IP
-      "http://192.168.1.50:8000/api/v1";
+  final URL = dotenv.env['BACKEND_URL'] ?? "missing backend url";
 
   Future<int> insertUser(User? user) async {
     final url = Uri.parse('${URL}/auth/company-signup');
