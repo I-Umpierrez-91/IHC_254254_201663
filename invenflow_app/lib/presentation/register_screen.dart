@@ -89,7 +89,6 @@ class RegisterScreen extends StatelessWidget {
                         lastName: lastNameController.text,
                         companyName: companyNameController.text,
                         password: passwordController.text);
-                    print(newUser);
                     factory.insertUser(newUser);
                   }
                 },
