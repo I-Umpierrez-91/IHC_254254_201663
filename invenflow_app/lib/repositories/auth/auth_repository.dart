@@ -14,6 +14,10 @@ class AuthRepository {
   }
 
   Future logIn(Session? session) async {
-    return await _authDataProvider.logIn(session);
+    try {
+      return await _authDataProvider.logIn(session);
+    } catch (e) {
+      return 'false';
+    }
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invenflow_app/presentation/register_screen.dart';
-
+import 'package:invenflow_app/presentation/home_screen.dart';
 import 'package:invenflow_app/presentation/widgets/error_message.dart';
 
 import '../factory_service.dart';
@@ -11,6 +11,7 @@ class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  String welcomeMessage = '';
 
   void _login() async {
   final email = emailController.text;
@@ -61,7 +62,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 32.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // Verify that the text fields are completed.
                 if (emailController.text.isEmpty ||
                     passwordController.text.isEmpty) {
@@ -72,7 +73,17 @@ class LoginPage extends StatelessWidget {
                   Session session = Session(
                       email: emailController.text,
                       password: passwordController.text);
-                  factory.logIn(session);
+                  var loginToken = await factory.logIn(session);
+                  print(loginToken);
+                  if (loginToken != 'false') {
+                    print("1");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                  } else {
+                    print("2");
+                    showErrorDialog(
+                        context, 'Usuario o contraseña incorrecta.');
+                  }
                 }
               },
               child: const Text('Iniciar sesión'),

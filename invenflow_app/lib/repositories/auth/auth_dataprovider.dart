@@ -7,10 +7,10 @@ import '../../common/tockenManager.dart';
 
 class AuthDataProvider {
   static const URL =
-  // android emulator usar 10.0.2.2
-  // dispositivo real usar IP
-      "http://192.168.1.50:800api/v1";
-      
+      // android emulator usar 10.0.2.2
+      // dispositivo real usar IP
+      "http://192.168.1.50:8000/api/v1";
+
   Future<int> insertUser(User? user) async {
     final url = Uri.parse('${URL}/auth/company-signup');
     final body = jsonEncode({"adminData": user?.toJson()});
