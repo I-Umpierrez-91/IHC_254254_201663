@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invenflow_app/presentation/register_screen.dart';
+import 'package:invenflow_app/presentation/home_screen.dart';
 import 'package:invenflow_app/presentation/widgets/error_message.dart';
 
 import '../factory_service.dart';
@@ -52,6 +53,8 @@ class LoginPage extends StatelessWidget {
                       email: emailController.text,
                       password: passwordController.text);
                   factory.logIn(session);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
                 }
               },
               child: const Text('Iniciar sesión'),
