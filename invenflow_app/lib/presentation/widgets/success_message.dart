@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../login_screen.dart';
 import '../products_screen.dart';
 
 class SuccessMessageWidget extends StatelessWidget {
@@ -56,6 +57,9 @@ void showSuccessDialog(
                   context,
                   MaterialPageRoute(builder: (context) => ProductsScreen()),
                 );
+              } else if (action == 'toLoginScreen') {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
               }
             },
             child: const Text('OK'),
