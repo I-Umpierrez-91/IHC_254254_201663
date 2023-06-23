@@ -21,12 +21,12 @@ class AuthDataProvider {
 
     if (response.statusCode == 201) {
       final jsonResponse = jsonDecode(response.body);
-      final userId = jsonResponse["userId"] as int;
+      final userId = jsonResponse["user"] as int;
       print('User created sucessfully. This is the userId created: ${userId}');
       return userId;
     } else {
       print('Request failed with status code: ${response.statusCode}');
-      throw Exception('Failed to insert user');
+      return -1;
     }
   }
 

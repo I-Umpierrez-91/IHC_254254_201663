@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:invenflow_app/factory_service.dart';
 import 'package:invenflow_app/models/user.dart';
 import 'package:invenflow_app/presentation/widgets/error_message.dart';
+import 'package:invenflow_app/presentation/widgets/success_message.dart';
+
+import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
@@ -71,7 +74,7 @@ class RegisterScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24.0),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   // Verify that the text fields are completed.
                   if (emailController.text.isEmpty ||
                       firstNameController.text.isEmpty ||
@@ -89,7 +92,13 @@ class RegisterScreen extends StatelessWidget {
                         lastName: lastNameController.text,
                         companyName: companyNameController.text,
                         password: passwordController.text);
-                    factory.insertUser(newUser);
+                    var userId = await factory.insertUser(newUser);
+                    if (userId == -1) {
+                      showErrorDialog(context, 'Error al crear usuario.');
+                    } else {
+                      showSuccessDialog(context,
+                          'Usuario creado de exitosamente.', "toLoginScreen");
+                    }
                   }
                 },
                 child: const Text('+ Registrarme'),
