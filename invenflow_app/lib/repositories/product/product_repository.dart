@@ -12,6 +12,10 @@ class ProductRepository {
     return await _productDataProvider.getProducts();
   }
 
+  Future getProduct(String productId) async {
+    return await _productDataProvider.getProduct(productId);
+  }
+
   Future createProduct(Product? product) async {
     return await _productDataProvider.createProduct(product);
   }

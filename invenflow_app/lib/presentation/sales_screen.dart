@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:invenflow_app/presentation/qr_scanner_screen.dart';
+import 'package:invenflow_app/presentation/widgets/order_detail_item.dart';
 
 import '../factory_service.dart';
-import '../models/order_line.dart';
+import '../models/order_detail.dart';
+import '../models/product.dart';
 
 class SalesScreen extends StatefulWidget {
   const SalesScreen({super.key});
@@ -12,14 +15,26 @@ class SalesScreen extends StatefulWidget {
 
 class _SalesScreenState extends State<SalesScreen> {
   late List<OrderDetail> orderDetails = [];
+  late Product product;
   bool nextPressed = false;
   double saleTotal = 0.0;
+
+  Future<void> loadProduct(String productId) async {
+    final factory = FactoryServices().getProductService();
+    product = await factory.getProduct(productId) as Product;
+    setState(() {}); // Trigger a rebuild after loading the products
+  }
 
   void addProduct() {
     setState(() {
       orderDetails.add(OrderDetail(
-        productId: 1,
-        price: 10,
+        product: Product(
+          id: 1,
+          name: 'Producto 1',
+          description: 'Descripción del producto 1',
+          price: 10,
+        ),
+        subtotal: 10,
         quantity: 1,
       ));
     });
@@ -33,7 +48,7 @@ class _SalesScreenState extends State<SalesScreen> {
   }
 
   void cancel() {
-    Navigator.pop(context); 
+    Navigator.pop(context);
   }
 
   double calculateSaleTotal() {
@@ -59,15 +74,22 @@ class _SalesScreenState extends State<SalesScreen> {
             child: ListView.builder(
               itemCount: orderDetails.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(orderDetails[index].productId.toString()),
-                );
+                return OrderDetailItem(orderDetail: orderDetails[index]);
               },
             ),
           ),
           if (!nextPressed)
             FloatingActionButton(
-              onPressed: addProduct,
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QRScannerScreen()),
+                );
+                if (result != null) {
+                  // Aquí puedes utilizar el valor del código QR devuelto
+                  await loadProduct(result);
+                }
+              },
               child: const Icon(Icons.add),
             ),
           const SizedBox(height: 16),

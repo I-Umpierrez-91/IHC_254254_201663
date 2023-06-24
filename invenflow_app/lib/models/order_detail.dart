@@ -1,21 +1,23 @@
+import 'package:invenflow_app/models/product.dart';
+
 class OrderDetail {
   int? id;
-  int productId;
-  int price;
+  Product product;
+  int subtotal;
   int? quantity;
 
   OrderDetail({
     this.id,
-    required this.productId,
-    required this.price,
+    required this.product,
+    required this.subtotal,
     required this.quantity,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'productId': productId,
-      'price': price,
+      'product': product,
+      'subtotal': subtotal,
       'quantity': quantity,
     };
   }
