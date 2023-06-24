@@ -1,3 +1,4 @@
+const qr = require('qrcode');
 const {
   knex,
   tableNames,
@@ -22,9 +23,10 @@ const createProduct = async (companyId, product) => knex.transaction(async (tran
   // TODO: Validate name unique together with business (https://mn201663.atlassian.net/browse/ASP2023-48)
   product.id = null; // eslint-disable-line no-param-reassign
   product.companyId = companyId; // eslint-disable-line no-param-reassign
-
   const [id] = await products(companyId, transaction)
     .insert(product);
+  const qrCodeImage = await qr.toDataURL(String(id));
+  await products(companyId, transaction).update({ qrCode: qrCodeImage }).where('id', id);
 
   return new Product(
     await products(companyId, transaction)

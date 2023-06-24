@@ -1,11 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:invenflow_app/factory_service.dart';
 import 'package:invenflow_app/models/user.dart';
 import 'package:invenflow_app/presentation/widgets/error_message.dart';
 import 'package:invenflow_app/presentation/widgets/success_message.dart';
 
-import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});

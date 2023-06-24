@@ -56,11 +56,11 @@ class LoginPage extends StatelessWidget {
                   var loginToken = await factory.logIn(session);
                   print(loginToken);
                   if (loginToken != 'false') {
-                    print("1");
+                    print("camino 1");
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                        MaterialPageRoute(builder: (context) => const HomeScreen()));
                   } else {
-                    print("2");
+                    print("camino 2");
                     showErrorDialog(
                         context, 'Usuario o contraseña incorrecta.');
                   }

@@ -2,17 +2,17 @@ class Product {
   int? id;
   String name;
   String description;
-  String? image;
   int price;
   int? stock;
+  String? qrCode;
 
   Product({
     this.id,
     required this.name,
     required this.description,
-    this.image,
     required this.price,
     this.stock,
+    this.qrCode,
   });
 
   Map<String, dynamic> toJson() {
@@ -20,9 +20,9 @@ class Product {
       'id': id,
       'name': name,
       'description': description,
-      'image': image,
       'price': price,
       'stock': stock,
+      'qrCode': qrCode,
     };
   }
 }

@@ -10,7 +10,7 @@ class AuthDataProvider {
   final URL = dotenv.env['BACKEND_URL'] ?? "missing backend url";
 
   Future<int> insertUser(User? user) async {
-    final url = Uri.parse('${URL}/auth/company-signup');
+    final url = Uri.parse('$URL/auth/company-signup');
     final body = jsonEncode({"adminData": user?.toJson()});
 
     final response = await http.post(
@@ -21,8 +21,8 @@ class AuthDataProvider {
 
     if (response.statusCode == 201) {
       final jsonResponse = jsonDecode(response.body);
-      final userId = jsonResponse["user"] as int;
-      print('User created sucessfully. This is the userId created: ${userId}');
+      final userId = jsonResponse["userId"] as int;
+      print('User created sucessfully. This is the userId created: $userId');
       return userId;
     } else {
       print('Request failed with status code: ${response.statusCode}');
@@ -31,7 +31,7 @@ class AuthDataProvider {
   }
 
   Future<String?> logIn(Session? session) async {
-    final url = Uri.parse('${URL}/auth/login');
+    final url = Uri.parse('$URL/auth/login');
     final body = jsonEncode(session?.toJson());
 
     final response = await http.post(
@@ -46,7 +46,7 @@ class AuthDataProvider {
       final token = jsonResponse["token"] as String;
       await TokenManager.saveToken(token);
       String? savedToken = await TokenManager.getToken();
-      print("-> savedToken: ${savedToken}");
+      print("-> savedToken: $savedToken");
       return savedToken;
     } else {
       print('Request failed with status code: ${response.statusCode}');

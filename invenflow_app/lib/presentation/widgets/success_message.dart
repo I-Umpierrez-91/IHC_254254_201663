@@ -55,7 +55,7 @@ void showSuccessDialog(
               } else if (action == 'toProductScreen') {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProductsScreen()),
+                  MaterialPageRoute(builder: (context) => const ProductsScreen()),
                 );
               } else if (action == 'toLoginScreen') {
                 Navigator.push(context,

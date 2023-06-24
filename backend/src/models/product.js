@@ -24,6 +24,7 @@ class Product {
     price,
     stock,
     companyId,
+    qrCode,
   }) {
     this.id = id;
     this.name = name;
@@ -32,6 +33,7 @@ class Product {
     this.price = price;
     this.stock = stock;
     this.companyId = companyId;
+    this.qrCode = qrCode;
   }
 
   async validate() {
@@ -49,6 +51,7 @@ class Product {
       description: this.description,
       price: this.price,
       stock: this.stock,
+      qrCode: this.qrCode,
     };
   }
 }
