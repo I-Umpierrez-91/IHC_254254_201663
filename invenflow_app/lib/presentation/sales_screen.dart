@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invenflow_app/presentation/qr_scanner_screen.dart';
+import 'package:invenflow_app/presentation/widgets/add_product.dart';
 import 'package:invenflow_app/presentation/widgets/order_detail_item.dart';
 
 import '../factory_service.dart';
@@ -16,6 +17,7 @@ class SalesScreen extends StatefulWidget {
 class _SalesScreenState extends State<SalesScreen> {
   late List<OrderDetail> orderDetails = [];
   late Product product;
+  double progress = 0.33;
   bool nextPressed = false;
   double saleTotal = 0.0;
 
@@ -25,25 +27,18 @@ class _SalesScreenState extends State<SalesScreen> {
     setState(() {}); // Trigger a rebuild after loading the products
   }
 
-  void addProduct() {
-    setState(() {
-      orderDetails.add(OrderDetail(
-        product: Product(
-          id: 1,
-          name: 'Producto 1',
-          description: 'Descripción del producto 1',
-          price: 10,
-        ),
-        subtotal: 10,
-        quantity: 1,
-      ));
-    });
-  }
-
   void next() {
     setState(() {
       nextPressed = true;
       saleTotal = calculateSaleTotal();
+      progress = 0.66;
+    });
+  }
+
+  void back() {
+    setState(() {
+      nextPressed = false;
+      progress = 0.33;
     });
   }
 
@@ -57,9 +52,20 @@ class _SalesScreenState extends State<SalesScreen> {
     double total = 0.0;
     for (OrderDetail orderDetail in orderDetails) {
       // Supongamos que cada producto tiene un precio de $10
-      total += 10.0;
+      total += orderDetail.subtotal;
     }
     return total;
+  }
+
+  Future<AddProductCardResult?> _showPopupCard(BuildContext context) async {
+    final result = await showDialog<AddProductCardResult?>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AddProductCard(product: product),
+    );
+    if (result != null) {
+      return result;
+    }
   }
 
   @override
@@ -70,6 +76,21 @@ class _SalesScreenState extends State<SalesScreen> {
       ),
       body: Column(
         children: [
+          const SizedBox(height: 20.0),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "Productos: ",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20.0),
           Expanded(
             child: ListView.builder(
               itemCount: orderDetails.length,
@@ -79,18 +100,36 @@ class _SalesScreenState extends State<SalesScreen> {
             ),
           ),
           if (!nextPressed)
-            FloatingActionButton(
-              onPressed: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => QRScannerScreen()),
-                );
-                if (result != null) {
-                  // Aquí puedes utilizar el valor del código QR devuelto
-                  await loadProduct(result);
-                }
-              },
-              child: const Icon(Icons.add),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 100.0),
+                child: FloatingActionButton(
+                  onPressed: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => QRScannerScreen()),
+                    );
+                    if (result != null) {
+                      await loadProduct(result);
+                      AddProductCardResult? newLine =
+                          await _showPopupCard(context);
+                      if (newLine != null) {
+                        setState(() {
+                          orderDetails.add(OrderDetail(
+                            product: product,
+                            quantity: newLine.quantity,
+                            subtotal: newLine.quantity * product.price,
+                          ));
+                        });
+                      }
+                    }
+                    ;
+                  },
+                  child: const Icon(Icons.add),
+                ),
+              ),
             ),
           const SizedBox(height: 16),
           if (nextPressed)
@@ -98,40 +137,58 @@ class _SalesScreenState extends State<SalesScreen> {
               'Total: \$${saleTotal.toStringAsFixed(2)}',
               style: const TextStyle(fontSize: 18),
             ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: Colors.grey[200],
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                ),
+              ), 
+          const SizedBox(height: 50),
         ],
       ),
       floatingActionButton: nextPressed
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Botón 1'),
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Botón 2'),
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Botón 3'),
-                ),
-              ],
-            )
+          ? Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('Generar QR de pago'),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('Paga por otro medio'),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: back,
+                    style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 164, 58, 58),
+                    ),
+                    child: const Text('Volver'),
+                  ),
+                  const SizedBox(width: 16,
+                  height: 100,),
+                ],
+              ),
+          )
           : Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  onPressed: next,
-                  child: const Text('Siguiente'),
-                ),
                 const SizedBox(width: 16),
                 ElevatedButton(
                   onPressed: cancel,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey,
+                  ),
                   child: const Text('Cancelar'),
                 ),
+                const SizedBox(width: 16),
+                ElevatedButton(onPressed: next, child: const Text('Siguiente')),
+                const SizedBox(height: 200),
               ],
             ),
     );
