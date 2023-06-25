@@ -35,7 +35,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('QR Scanner'),
+        title: Text('Escanear Producto'),
       ),
       body: Column(
         children: [
@@ -54,9 +54,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                   controller.resumeCamera();
                   setState(() {
                     qrValue = '';
+                    Navigator.pop(context, null);
                   });
                 },
-                child: Text('Reanudar escaneo'),
+                child: Text('Volver'),
               ),
             ),
           ),

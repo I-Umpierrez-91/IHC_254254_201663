@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:invenflow_app/presentation/qr_payment_screen.dart';
 import 'package:invenflow_app/presentation/qr_scanner_screen.dart';
 import 'package:invenflow_app/presentation/widgets/add_product.dart';
-import 'package:invenflow_app/presentation/widgets/order_detail_item.dart';
 
 import '../factory_service.dart';
 import '../models/order_detail.dart';
@@ -28,6 +28,15 @@ class _SalesScreenState extends State<SalesScreen> {
   }
 
   void next() {
+    if (orderDetails.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Agrega al menos un producto'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
     setState(() {
       nextPressed = true;
       saleTotal = calculateSaleTotal();
@@ -57,6 +66,13 @@ class _SalesScreenState extends State<SalesScreen> {
     return total;
   }
 
+  void removeElement(int? id) {
+    setState(() {
+      orderDetails.removeAt(id!);
+      saleTotal = calculateSaleTotal();
+    });
+  }
+
   Future<AddProductCardResult?> _showPopupCard(BuildContext context) async {
     final result = await showDialog<AddProductCardResult?>(
       context: context,
@@ -68,11 +84,42 @@ class _SalesScreenState extends State<SalesScreen> {
     }
   }
 
+  void showPopupMessage(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Nueva Venta'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void confirm(BuildContext context) async {
+    final saleFactory = FactoryServices().getSalesService();
+    final result = await saleFactory.createSale(orderDetails);
+    if (result) {
+      showPopupMessage(context, 'Venta registrada con éxito');
+      Navigator.pop(context);
+    } else {
+      showPopupMessage(context, 'Error al registrar la venta');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ventas'),
+        title: const Text('Nueva Venta'),
       ),
       body: Column(
         children: [
@@ -95,7 +142,21 @@ class _SalesScreenState extends State<SalesScreen> {
             child: ListView.builder(
               itemCount: orderDetails.length,
               itemBuilder: (context, index) {
-                return OrderDetailItem(orderDetail: orderDetails[index]);
+                return ListTile(
+                  title: Text(orderDetails[index].product.name),
+                  subtitle: Text(
+                    'Cantidad: ${orderDetails[index].quantity} - Precio: \$${orderDetails[index].subtotal}',
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () => removeElement(index),
+                        icon: Icon(Icons.delete),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           ),
@@ -133,48 +194,69 @@ class _SalesScreenState extends State<SalesScreen> {
             ),
           const SizedBox(height: 16),
           if (nextPressed)
-            Text(
-              'Total: \$${saleTotal.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 18),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 200.0),
+              child: Text(
+                'Total: \$${saleTotal.toStringAsFixed(2)}',
+                style: const TextStyle(fontSize: 18),
+              ),
             ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: LinearProgressIndicator(
-                  value: progress,
-                  backgroundColor: Colors.grey[200],
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                ),
-              ), 
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: LinearProgressIndicator(
+              value: progress,
+              backgroundColor: Colors.grey[200],
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
+          ),
           const SizedBox(height: 50),
         ],
       ),
       floatingActionButton: nextPressed
-          ? Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Generar QR de pago'),
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Paga por otro medio'),
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed: back,
-                    style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 164, 58, 58),
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(width: 16),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  QRPaymentScreen(total: calculateSaleTotal())),
+                        );
+                        confirm(context);
+                        showPopupMessage(context, 'Venta creada correctamente');
+                      },
+                      child: const Text('Generar QR de pago'),
                     ),
-                    child: const Text('Volver'),
-                  ),
-                  const SizedBox(width: 16,
-                  height: 100,),
-                ],
-              ),
-          )
+                    const SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        confirm(context);
+                      },
+                      child: const Text('Paga por otro medio'),
+                    ),
+                    const SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: back,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 164, 58, 58),
+                      ),
+                      child: const Text('Volver'),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                      height: 100,
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+              ],
+            )
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
