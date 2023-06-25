@@ -1,6 +1,6 @@
 Obligatorio de Interacción Humano-Computadora - Ismael Umpierrez, Marcos Novelli
 
-# Setup de frontend, backend y base de datos en local:
+# Setup and run de frontend, backend y base de datos en local:
 ### Pre-requisitos:
 - Tener node instalado
 - Tener docker instalado y levantado
