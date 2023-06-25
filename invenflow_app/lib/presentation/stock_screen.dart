@@ -4,6 +4,8 @@ import 'package:invenflow_app/models/product.dart';
 import 'package:invenflow_app/presentation/widgets/error_message.dart';
 import 'package:invenflow_app/presentation/widgets/success_message.dart';
 
+import 'home_screen.dart';
+
 class StockScreen extends StatefulWidget {
   @override
   _StockScreenState createState() => _StockScreenState();
@@ -28,7 +30,27 @@ class _StockScreenState extends State<StockScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Stock'),
+        title: Row(
+          children: [
+            const Text('Stock'),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.home),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       body: products != null
           ? ListView.builder(

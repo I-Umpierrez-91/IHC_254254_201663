@@ -13,7 +13,7 @@ docker_compose_up:
 
 execute_migrations:
 	@echo '->> START - execute_migrations'
-	cd ./backend && docker exec obligatorio--api-gateway npx knex migrate:latest
+	cd ./backend && docker exec obligatorio--backend npx knex migrate:latest
 	@sleep 30
 	@echo '->> END - execute_migrations'
 
