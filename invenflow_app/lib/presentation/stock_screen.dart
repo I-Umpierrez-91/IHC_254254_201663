@@ -42,10 +42,7 @@ class _StockScreenState extends State<StockScreen> {
                   IconButton(
                     icon: Icon(Icons.home),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                      );
+                      Navigator.pop(context);
                     },
                   ),
                 ],

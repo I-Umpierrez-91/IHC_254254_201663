@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:invenflow_app/presentation/home_screen.dart';
 import 'package:invenflow_app/presentation/widgets/error_message.dart';
 import 'package:invenflow_app/presentation/widgets/success_message.dart';
 
@@ -21,7 +20,6 @@ class ProductsScreen extends StatefulWidget {
 class _ProductsScreenState extends State<ProductsScreen> {
   late List<Product> products = [];
   final ImagePicker _picker = ImagePicker();
-  XFile? _imageFile;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
@@ -40,13 +38,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
     setState(() {}); // Trigger a rebuild after loading the products
   }
 
-  Future<void> _openCamera() async {
-    final image = await _picker.pickImage(source: ImageSource.camera);
-    setState(() {
-      _imageFile = image;
-    });
-  }
-
   Uint8List dataUrlToBytes(String? dataUrl) {
     if (dataUrl == null) {
       return Uint8List(0);
@@ -54,6 +45,26 @@ class _ProductsScreenState extends State<ProductsScreen> {
       final byteData = Base64Decoder().convert(dataUrl.split(",").last);
       return Uint8List.fromList(byteData);
     }
+  }
+
+  Future showPopupMessage(BuildContext context, String message) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Nuevo Producto'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -70,10 +81,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   IconButton(
                     icon: Icon(Icons.home),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                      );
+                      Navigator.pop(context);
                     },
                   ),
                 ],
@@ -171,6 +179,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         onPressed: () {
           showModalBottomSheet(
             context: context,
+            isScrollControlled: true,
             builder: (context) {
               return Container(
                 padding: const EdgeInsets.all(16.0),
@@ -248,7 +257,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ),
                     const SizedBox(height: 16.0),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // Verify that the text fields are completed.
                         if (nameController.text.isEmpty ||
                             descriptionController.text.isEmpty ||
@@ -264,10 +273,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
                               price: int.parse(priceController.text),
                               stock: int.parse(stockController.text));
                           factory.createProduct(newProduct);
-                          showSuccessDialog(
-                              context,
-                              'Producto creado de exitosamente.',
-                              "toProductScreen");
+                          await showPopupMessage(context, 'Producto creado con éxito');
+                          await loadProducts();
+                          Navigator.pop(context);
                         }
                       },
                       child: const Text('Add'),

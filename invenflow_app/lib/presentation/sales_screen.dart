@@ -105,6 +105,9 @@ class _SalesScreenState extends State<SalesScreen> {
   }
 
   void confirm(BuildContext context) async {
+    setState(() {
+      progress = 1.0;
+    });
     final saleFactory = FactoryServices().getSalesService();
     final result = await saleFactory.createSale(orderDetails);
     print(result);
