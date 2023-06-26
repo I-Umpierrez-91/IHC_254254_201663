@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:invenflow_app/models/sale.dart';
 
+
 import '../../common/tockenManager.dart';
 
 class SalesDataProvider {
@@ -12,23 +13,23 @@ class SalesDataProvider {
   Future<int> postSale(Sale sale) async {
     final url = Uri.parse('$URL/sales');
     final body = jsonEncode(sale?.toJson());
+
     final currentToken = await TokenManager.getToken();
-    print(body);
     final response = await http.post(
       url,
-      headers: {'Authorization': 'Bearer $currentToken'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $currentToken'
+      },
       body: body,
     );
     print("Venta ${response.body} creada");
 
     if (response.statusCode == 200) {
-      final List<dynamic> jsonResponse = jsonDecode(response.body);
-      print("2 $jsonResponse");
       return response.statusCode;
     } else {
       print('Request failed with status code: ${response.statusCode}');
       throw Exception('Failed to get products');
     }
   }
-
 }

@@ -15,7 +15,7 @@ class OrderDetail {
 
   Map<String, dynamic> toJson() {
     return {
-      'productId': product,
+      'productId': product.id,
       'quantity': quantity,
     };
   }

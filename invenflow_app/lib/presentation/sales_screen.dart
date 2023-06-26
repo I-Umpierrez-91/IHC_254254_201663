@@ -84,8 +84,8 @@ class _SalesScreenState extends State<SalesScreen> {
     }
   }
 
-  void showPopupMessage(BuildContext context, String message) {
-    showDialog(
+  Future showPopupMessage(BuildContext context, String message) async {
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -107,8 +107,9 @@ class _SalesScreenState extends State<SalesScreen> {
   void confirm(BuildContext context) async {
     final saleFactory = FactoryServices().getSalesService();
     final result = await saleFactory.createSale(orderDetails);
-    if (result) {
-      showPopupMessage(context, 'Venta registrada con éxito');
+    print(result);
+    if (result == 200) {
+      await showPopupMessage(context, 'Venta registrada con éxito');
       Navigator.pop(context);
     } else {
       showPopupMessage(context, 'Error al registrar la venta');
@@ -229,7 +230,6 @@ class _SalesScreenState extends State<SalesScreen> {
                                   QRPaymentScreen(total: calculateSaleTotal())),
                         );
                         confirm(context);
-                        showPopupMessage(context, 'Venta creada correctamente');
                       },
                       child: const Text('Generar QR de pago'),
                     ),
