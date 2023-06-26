@@ -21,9 +21,12 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(
-              'assets/images/invenflowLogo.png',
-              height: 150.0,
+            Flexible(
+              flex: 2,
+              child: Image.asset(
+                'assets/images/invenflowLogo.png',
+                height: 150.0,
+              ),
             ),
             const SizedBox(height: 16.0),
             TextFormField(
@@ -40,7 +43,7 @@ class LoginPage extends StatelessWidget {
                 labelText: 'Contraseña',
               ),
             ),
-            const SizedBox(height: 32.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () async {
                 // Verify that the text fields are completed.
@@ -56,11 +59,11 @@ class LoginPage extends StatelessWidget {
                   var loginToken = await factory.logIn(session);
                   print(loginToken);
                   if (loginToken != 'false') {
-                    print("1");
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()));
                   } else {
-                    print("2");
                     showErrorDialog(
                         context, 'Usuario o contraseña incorrecta.');
                   }

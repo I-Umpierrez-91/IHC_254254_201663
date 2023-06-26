@@ -3,16 +3,19 @@ const knexfile = require('../../knexfile');
 const knex = require('knex')(knexfile);
 const { tableNames } = require('../persistence/knex/tableNames');
 
-async function createSale(client, saleDate, saleDetails, totalCost) {
+async function createSale(client, saleDate, saleDetails, totalCost, latitude, longitude) {
   const sale = {
     client,
     saleDate,
     totalCost,
+    latitude,
+    longitude,
   };
 
   const trx = await knex.transaction();
 
   try {
+    console.log(sale);
     const trxSaleId = await trx(tableNames.SALES_TABLE).insert(sale);
 
     for (const currentSaleDetail of saleDetails) {

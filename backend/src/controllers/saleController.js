@@ -13,6 +13,8 @@ exports.post = async (req, res, next) => {
       client,
       saleDate,
       saleDetails,
+      latitude,
+      longitude,
     } = req.body;
     const products = await getProductByIds(res.locals.companyId, saleDetails);
     const totalCost = await getTotalCost(saleDetails, products);
@@ -27,6 +29,8 @@ exports.post = async (req, res, next) => {
       saleDate,
       saleDetailsWithStock,
       totalCost,
+      latitude,
+      longitude,
     );
 
     res.json(saleId);

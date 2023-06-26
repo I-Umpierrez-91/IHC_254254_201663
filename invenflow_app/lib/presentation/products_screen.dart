@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:invenflow_app/presentation/home_screen.dart';
@@ -6,9 +9,10 @@ import 'package:invenflow_app/presentation/widgets/success_message.dart';
 
 import '../factory_service.dart';
 import '../models/product.dart';
+import './widgets/image_page.dart';
 
 class ProductsScreen extends StatefulWidget {
-  ProductsScreen({Key? key}) : super(key: key);
+  const ProductsScreen({Key? key}) : super(key: key);
 
   @override
   _ProductsScreenState createState() => _ProductsScreenState();
@@ -43,6 +47,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
     });
   }
 
+  Uint8List dataUrlToBytes(String? dataUrl) {
+    if (dataUrl == null) {
+      return Uint8List(0);
+    } else {
+      final byteData = Base64Decoder().convert(dataUrl.split(",").last);
+      return Uint8List.fromList(byteData);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,12 +87,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
+                String sid = product.id.toString();
                 return Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
                   child: Card(
                     child: Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: ListTile(
                         title: Row(
                           children: [
@@ -87,36 +101,58 @@ class _ProductsScreenState extends State<ProductsScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    product.name,
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ImagePage(
+                                              id: sid,
+                                              imageItem: dataUrlToBytes(
+                                                  product.qrCode)),
+                                        ),
+                                      );
+                                    },
+                                    child: Hero(
+                                      tag: sid,
+                                      child: Image.memory(
+                                        dataUrlToBytes(product.qrCode),
+                                        width: 100,
+                                        height: 100,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 4.0),
-                                  Text(
-                                    product.description,
-                                    style: TextStyle(fontSize: 14.0),
                                   ),
                                 ],
                               ),
                             ),
-                            SizedBox(width: 8.0),
+                            const SizedBox(width: 8.0),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  'Price: \$${product.price.toStringAsFixed(2)}',
-                                  style: TextStyle(
+                                  product.name,
+                                  style: const TextStyle(
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(height: 4.0),
+                                const SizedBox(height: 4.0),
+                                Text(
+                                  product.description,
+                                  style: const TextStyle(fontSize: 14.0),
+                                ),
+                                const SizedBox(height: 4.0),
+                                Text(
+                                  'Price: \$${product.price.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4.0),
                                 Text(
                                   'Stock: ${product.stock}',
-                                  style: TextStyle(fontSize: 14.0),
+                                  style: const TextStyle(fontSize: 14.0),
                                 ),
                               ],
                             ),
@@ -128,7 +164,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 );
               },
             )
-          : Center(
+          : const Center(
               child: CircularProgressIndicator(),
             ),
       floatingActionButton: FloatingActionButton(
@@ -137,11 +173,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
             context: context,
             builder: (context) {
               return Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
@@ -151,16 +187,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        IconButton(
-                          onPressed: _openCamera,
-                          icon: Icon(Icons.camera_alt),
-                        ),
                       ],
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     TextFormField(
                       controller: nameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Name',
                       ),
                       validator: (value) {
@@ -172,7 +204,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ),
                     TextFormField(
                       controller: descriptionController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Description',
                       ),
                       validator: (value) {
@@ -183,20 +215,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       },
                     ),
                     TextFormField(
-                      controller: imageController,
-                      decoration: InputDecoration(
-                        labelText: 'Image',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an image URL';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
                       controller: priceController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Price',
                       ),
                       keyboardType: TextInputType.number,
@@ -212,7 +232,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ),
                     TextFormField(
                       controller: stockController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Stock',
                       ),
                       keyboardType: TextInputType.number,
@@ -226,7 +246,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     ElevatedButton(
                       onPressed: () {
                         // Verify that the text fields are completed.
@@ -241,7 +261,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           Product newProduct = Product(
                               name: nameController.text,
                               description: descriptionController.text,
-                              image: imageController.text,
                               price: int.parse(priceController.text),
                               stock: int.parse(stockController.text));
                           factory.createProduct(newProduct);
@@ -251,7 +270,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                               "toProductScreen");
                         }
                       },
-                      child: Text('Add'),
+                      child: const Text('Add'),
                     ),
                   ],
                 ),
@@ -259,7 +278,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             },
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
